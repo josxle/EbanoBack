@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from db import db
 from models.pagos import Pagos
+from services.pagos_service import registrar_pago
 
 pagos_bp = Blueprint('pagos', __name__)
 
@@ -25,20 +26,14 @@ def get_pagos():
 # POST
 @pagos_bp.route('/pagos', methods=['POST'])
 def post_pago():
-    data = request.json
-
-    nuevo_pago = Pagos(
-        PorcCobro=data.get('PorcCobro'),
-        pocInteres=data.get('pocInteres'),
-        Concepto=data.get('Concepto'),
-        Monto=data.get('Monto'),
-        Saldo=data.get('Saldo'),
-        VentasNum=data.get('VentasNum'),
-        FomaPagCod=data.get('FomaPagCod')
-    )
-    db.session.add(nuevo_pago)
-    db.session.commit()
-    return jsonify({'message': 'Pago registrado correctamente'}), 201
+    data = request.get_json()
+    try:
+        pago = registrar_pago(data)
+        return jsonify({'message': 'Pago registrado correctamente', 'folio': pago.Folio}), 201
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'error': 'Error interno del servidor'}), 500
 
 # PUT
 @pagos_bp.route('/pagos/<int:folio>', methods=['PUT'])

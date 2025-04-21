@@ -7,6 +7,7 @@ class Productos(db.Model):
     Codigo = db.Column(db.String(5), primary_key=True)
     Nombre = db.Column(db.String(30), unique=True, nullable=True)
     Descripcion = db.Column(db.String(60), nullable=True)
+    Stock = db.Column(db.Integer, nullable=False)
     PU = db.Column(db.Float, nullable=True)
 
     ClasificacionCod = db.Column(db.String(5), db.ForeignKey('CLASIFIC_PRODUC.Codigo'), nullable=False)

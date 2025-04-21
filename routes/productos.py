@@ -14,6 +14,7 @@ def get_productos():
             'Codigo': i.Codigo,
             'Nombre': i.Codigo, 
             'Descripcion': i.Codigo,
+            'Stock': i.Stock,
             'PU': i.PU,
             'ClasificacionCod': i.ClasificacionCod
         } for i in prod
@@ -30,10 +31,11 @@ def post_producto():
         return jsonify({'error': 'Clasificación no encontrada'}), 404
 
     nuevo = Productos(
-        Codigo=data.get('Codigo'),
-        Nombre=data.get('Nombre'),
-        Descripcion=data.get('Descripcion'),
-        PU=data.get('PU'),
+        Codigo = data.get('Codigo'),
+        Nombre = data.get('Nombre'),
+        Descripcion = data.get('Descripcion'),
+        Stock = data.get('Stock'),
+        PU = data.get('PU'),
         ClasificacionCod=data.get('ClasificacionCod')
     )
     db.session.add(nuevo)
@@ -48,6 +50,7 @@ def put_producto(codigo):
 
     producto.Nombre = data.get('Nombre', producto.Nombre)
     producto.Descripcion = data.get('Descripcion', producto.Descripcion)
+    producto.Stock = data.get('Stock', producto.Stock)
     producto.PU = data.get('PU', producto.PU)
 
     if 'ClasificacionCod' in data:

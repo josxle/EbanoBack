@@ -26,7 +26,7 @@ def post_tipoclient():
     )
     db.session.add(nuevo)
     db.session.commit()
-    return jsonify({'message': 'Producto agegado correctamente'})
+    return jsonify({'message': 'tipo cliente agegado correctamente'})
 
 # PUT
 @tipoCliente_bp.route('/tipoclient/<string:codigo>', methods=['PUT'])
