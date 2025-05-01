@@ -35,6 +35,33 @@ def post_vendedor():
     db.session.commit()
     return jsonify({'message': 'Vendedor creado exitosamente'}), 201
 
+# LOGIN
+@vendedores_bp.route('/vendedores/login', methods=['POST'])
+def login_vendedor():
+    data = request.json
+    nom_pila = data.get('nomPila')
+    correo = data.get('Correo')
+
+    if not nom_pila or not correo:
+        return jsonify({'message': 'Faltan campos requeridos'}), 400
+
+    vendedor = Vendedores.query.filter_by(nomPila=nom_pila, Correo=correo).first()
+
+    if vendedor:
+        return jsonify({
+            'message': 'Login exitoso',
+            'vendedor': {
+                'Numero': vendedor.Numero,
+                'nomPila': vendedor.nomPila,
+                'PrimerApell': vendedor.PrimerApell,
+                'SegunApell': vendedor.SegunApell,
+                'NumTel': vendedor.NumTel,
+                'Correo': vendedor.Correo
+            }
+        }), 200
+    else:
+        return jsonify({'message': 'Credenciales incorrectas'}), 401
+
 # PUT 
 @vendedores_bp.route('/vendedores/<int:numero>', methods=['PUT'])
 def put_vendedor(numero):
